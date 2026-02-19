@@ -65,7 +65,7 @@
 
         h2 { font-size: 1.1rem; text-align: center; text-decoration: underline; margin: 5px 0 15px 0; }
 
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 10px; }
         th, td { border: 1px solid black; padding: 4px 6px; font-size: 10px; word-wrap: break-word; }
 
         input, select, textarea { width: 100%; border: none; font-size: 10px; background: transparent; outline: none; }
@@ -101,6 +101,7 @@
             <li onclick="showHousekeeping(this)">Housekeeping Audit</li>
             <li onclick="showBiscuitAudit(this)">Weekly Biscuit Audit</li>
             <li onclick="showGroceryAudit(this)">Incoming Grocery</li>
+            <li onclick="showPlateAudit(this)">Daily Plate Count Audit</li>
         </ul>
     </div>
 
@@ -336,6 +337,89 @@
                     <div style="text-align: center;">___________________<br><strong>Sign. Of Sodexo </strong></div>
                     <div style="text-align: center;">___________________<br><strong>Sign of BAL </strong></div>
                 </div>`;
+        }
+
+        function showPlateAudit(element) {
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            element.classList.add('active');
+
+            const counters = [
+                {h: 'A', c: 'A1'}, {h: 'A', c: 'A2'}, {h: 'A', c: 'A3'}, {h: 'A', c: 'A4'},
+                {h: 'B', c: 'B1'}, {h: 'B', c: 'B2'}, {h: 'B', c: 'B3'}, {h: 'B', c: 'B4'},
+                {h: 'C', c: 'C1'}, {h: 'C', c: 'C2'}, {h: 'C', c: 'C3'}
+            ];
+
+            let upperRows = counters.map(item => `
+                <tr>
+                    <td style="text-align:center">${item.h}</td>
+                    <td style="text-align:center">${item.c}</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>`).join('');
+
+            document.getElementById('report-content').innerHTML = `
+                <h2 id="report-title">DAILY PLATE COUNT AUDIT SHEET</h2>
+                
+                <table style="border:none; margin-bottom: 10px;">
+                    <tr style="border:none;">
+                        <td style="border:none; width:33%"><strong>SHIFT:</strong> <input type="text" style="width:60%; border-bottom:1px solid #000;"></td>
+                        <td style="border:none; width:33%"><strong>TYPE OF MEAL:</strong> <input type="text" style="width:50%; border-bottom:1px solid #000;"></td>
+                        <td style="border:none; width:33%; text-align:right;"><strong>DATE:</strong> <input type="date" style="width:60%;"></td>
+                    </tr>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr style="background:#f2f2f2;">
+                            <th width="10%">Hall No</th>
+                            <th width="10%">Counter</th>
+                            <th width="15%">S.Plate</th>
+                            <th width="15%">P. Count</th>
+                            <th width="30%">Remarks</th>
+                            <th width="20%">TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${upperRows}
+                        <tr style="font-weight:bold; background:#eee;">
+                            <td colspan="2">TOTAL COUNT</td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="margin-top:20px;">
+                    <thead>
+                        <tr style="background:#f2f2f2;">
+                            <th>TIME</th>
+                            <th>ROUND</th>
+                            <th>S.PLATE</th>
+                            <th>P. PLATE</th>
+                            <th>CON PLATE</th>
+                            <th>PLTE COUNT</th>
+                            <th>ADD PLATE</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Array(5).fill('<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>').join('')}
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="text-align: center;">___________________<br><strong>Auditor Sign</strong></div>
+                    <div style="text-align: center;">
+                         ___________________<br><strong>Sign. Of Sodexo</strong>
+                    </div>
+                    <div style="text-align: center;">
+                         ___________________<br><strong>Sign of BAL</strong>
+                    </div>
+                </div>
+            `;
         }
 
         function generatePDF() {
